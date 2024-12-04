@@ -66,6 +66,15 @@ COPY --link frankenphp/conf.d/20-app.dev.ini $PHP_INI_DIR/app.conf.d/
 
 CMD [ "frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--watch" ]
 
+FROM node:lts AS node_builder
+
+WORKDIR /app
+ENV APP_ENV=prod
+COPY --link . ./
+
+RUN npm ci
+RUN npm run build
+
 # Prod FrankenPHP image
 FROM frankenphp_base AS frankenphp_prod
 
@@ -85,6 +94,8 @@ RUN set -eux; \
 # copy sources
 COPY --link . ./
 RUN rm -Rf frankenphp/
+
+COPY --from=node_builder /app/public ./public
 
 RUN set -eux; \
 	mkdir -p var/cache var/log; \

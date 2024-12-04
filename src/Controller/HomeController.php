@@ -28,6 +28,7 @@ class HomeController extends AbstractController
         $this->entrypointLookup->reset();
         $response = $this->sendEarlyHints($links);
 
+        sleep(1);
         return $this->render('home/index.html.twig', response: $response);
     }
 
@@ -42,6 +43,7 @@ class HomeController extends AbstractController
         }
         $this->entrypointLookup->reset();
 
+        sleep(1);
         return $this->render('home/index.html.twig');
     }
 
@@ -49,6 +51,7 @@ class HomeController extends AbstractController
     #[Route('/no-hints', name: 'no_hints')]
     public function noHints()
     {
+        sleep(1);
         return $this->render('home/index.html.twig');
     }
 }
